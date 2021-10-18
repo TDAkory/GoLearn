@@ -95,3 +95,34 @@ func main() {
 * channel 底层是个ringbuffer
 * channel调用会触发调度
 * 高并发、高性能编程不适合使用channel
+
+### un/buffered channel
+* buffered channel 会发生两次`copy`
+    * send goroutine -> buf
+    * buf -> receive goroutine
+* unbuffered channel 会发生一次`copy`
+    * send goroutine -> receive goroutine
+* unbuffered channel receive 完成后 `send` 才会返回
+
+### select closed channel
+* `for` + `select closed channel` 会造成死循环
+* `select` 中 `break` 无法跳出 `for` 循环
+```golang
+// 一直打印0
+func main() {
+    ch := make(chan int)
+    go func() {
+        ch <- 1
+        close(ch)
+    }()
+
+    for {
+        select {
+            case i := <-ch
+                fmt.Println(i)
+            default:
+                break
+        }
+    }
+}
+```
