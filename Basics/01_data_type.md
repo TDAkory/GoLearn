@@ -28,6 +28,12 @@
     - [访问和遍历](#访问和遍历)
     - [数组类型的不足](#数组类型的不足)
   - [切片](#切片)
+    - [创建切片](#创建切片)
+      - [基于数组](#基于数组)
+      - [基于切片](#基于切片)
+      - [直接创建](#直接创建)
+    - [遍历切片](#遍历切片)
+    - [动态增加元素](#动态增加元素)
 
 ## 1.1. 变量
 
@@ -407,4 +413,61 @@ for i, v := range arr {
 
 ```go
 var slice []string = []string{"a", "b", "c"}
+```
+
+### 创建切片
+
+#### 基于数组
+
+```go
+// 先定义一个数组
+months := [...]string{"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"}
+// 基于数组创建切片
+q2 := months[3:6]       // 第二季度
+summer := months[5:8]   // 夏季
+fmt.Println(q2)         // [April May June]
+fmt.Println(summer)     // [June July August]
+
+all := months[:]        // 基于 months 的所有元素创建切片
+```
+
+切片底层引用了一个数组，由三个部分构成 —— 指针、长度和容量，指针指向数组起始下标，长度对应切片中元素的个数，容量则是切片起始位置到底层数组结尾的位置。
+
+#### 基于切片
+
+```go
+firsthalf := months[:6]
+q1 := firsthalf[:3] // 基于 firsthalf 的前 3 个元素构建新切片
+```
+
+#### 直接创建
+
+```go
+mySlice1 := make([]int, 5)          // 初始长度为 5 的整型切片
+
+mySlice2 := make([]int, 5, 10)      // 初始长度为 5、容量为 10 的整型切片
+
+mySlice3 := []int{1, 2, 3, 4, 5}    // 创建并初始化包含 5 个元素的数组切片（长度和容量均为5）
+```
+
+### 遍历切片
+
+切片可以看作数组指针，因此遍历切片和遍历数组类似
+
+### 动态增加元素
+
+一个切片的容量初始值根据创建方式的不同而不同：
+
+- 对于基于数组和切片创建的切片而言，默认容量是从切片起始索引到对应底层数组的结尾索引；
+- 对于通过内置 make 函数创建的切片而言，在没有指定容量参数的情况下，默认容量和切片长度一致。
+
+```go
+var oldSlice = make([]int, 5, 10)
+fmt.Println("len(oldSlice):", len(oldSlice))    // len(oldSlice): 5
+fmt.Println("cap(oldSlice):", cap(oldSlice))    // cap(oldSlice): 10
+
+newSlice := append(oldSlice, 1, 2, 3)
+
+appendSlice := []int{1, 2, 3, 4, 5}
+newSlice := append(oldSlice, appendSlice...)  // 将一个切片追加到另一个切片的末尾, 注意末尾的 ... 不能省略
 ```
