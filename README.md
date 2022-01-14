@@ -1,6 +1,7 @@
 
 # Resources
 
+- [Golang 入门到精通教程](https://geekr.dev/golang-tutorial)
 - [Go 语言设计与实现](https://draveness.me/golang/)
 - [Go 语言原本](https://golang.design/under-the-hood/)
 
