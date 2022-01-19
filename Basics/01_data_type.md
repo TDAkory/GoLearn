@@ -37,6 +37,10 @@
     - [自动扩容](#自动扩容)
     - [内存复制](#内存复制)
     - [动态删除元素](#动态删除元素)
+    - [数据共享问题](#数据共享问题)
+  - [字典](#字典)
+    - [声明&初始化](#声明初始化)
+    - [使用方式](#使用方式)
 
 ## 1.1. 变量
 
@@ -510,4 +514,97 @@ slice4 := append(slice3[:0], slice3[3:]...)  // 删除开头三个元素
 slice5 := append(slice3[:1], slice3[4:]...)  // 删除中间三个元素
 slice6 := append(slice3[:0], slice3[:7]...)  // 删除最后三个元素
 slice7 := slice3[:copy(slice3, slice3[3:])]  // 删除开头前三个元素, copy 之所以可以用于删除元素，是因为其返回值是拷贝成功的元素个数，我们可以根据这个值完成新切片的设置从而达到「删除」元素的效果
+```
+
+### 数据共享问题
+
+```go
+type slice struct {
+  array unsafe.Pointer
+  len   int
+  cap   int
+}
+```
+
+在结构体中使用指针存在不同实例的数据共享问题：
+
+```go
+slice1 := []int{1, 2, 3, 4, 5}
+slice2 := slice1[1:3]
+slice2[1] = 6
+fmt.Println("slice1:", slice1)
+fmt.Println("slice2:", slice2)
+
+#### Answer
+slice1: [1 2 6 4 5]
+slice2: [2 6]
+```
+
+解决方式，可以如下
+
+```go
+slice1 := make([]int, 4)
+slice2 := slice1[1:3]
+slice1 = append(slice1, 0)  // append会重新分配内存
+slice1[1] = 2
+slice2[1] = 6
+fmt.Println("slice1:", slice1)
+fmt.Println("slice2:", slice2)
+
+#### Answer
+slice1: [0 2 0 0 0]
+slice2: [0 6]
+```
+
+## 字典
+
+Go字典是个无序集合
+
+```go
+var testMap map[string]int
+testMap = map[string]int {
+  "one": 1,
+  "two": 2,
+  "three": 3,
+}
+
+k := "two"
+v, ok := testMap[k]
+if ok {
+  fmt.Printf("The element of key %q: %d\n", k, v)
+} else {
+  fmt.Printf("Not found!")
+}
+```
+
+### 声明&初始化
+
+```go
+// 声明
+var testMap map[string]int
+
+// 初始化
+testMap := map[string]int{  // 初始化之后不能再添加键值对，否则会panic
+  "one": 1, 
+  "two": 2,
+  "three": 3,
+}
+
+var testMap = make(map[string]int)
+testMap["one"] = 1
+testMap["two"] = 2
+testMap["three"] = 3
+
+testMap = make(map[string]int, 100) // 创建时指定该字典的初始存储容量（超出会自动扩容）
+```
+
+### 使用方式
+
+```go
+testMap["four"] = 4 // 字典初始化之后才能进行赋值操作
+
+value, ok := testMap["one"]   // 查找，会返回两个值
+if ok { // 找到了
+  // 处理找到的value 
+}
 ```
