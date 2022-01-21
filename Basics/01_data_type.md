@@ -41,6 +41,10 @@
   - [字典](#字典)
     - [声明&初始化](#声明初始化)
     - [使用方式](#使用方式)
+  - [指针&unsafe.Pointer](#指针unsafepointer)
+    - [unsafe.Pointer](#unsafepointer)
+      - [指针类型转换](#指针类型转换)
+      - [指针运算实现](#指针运算实现)
 
 ## 1.1. 变量
 
@@ -607,4 +611,91 @@ value, ok := testMap["one"]   // 查找，会返回两个值
 if ok { // 找到了
   // 处理找到的value 
 }
+
+delete(testMap, "forr")   // 删除元素，若键不存在或者字典未初始化，则无事发生
+
+// 遍历字典
+for key, value := range testMap {
+  fmt.Println(key, value)
+}
+// 利用匿名变量进行遍历
+for _, value := range testMap {
+    fmt.Println(value)
+}
+// 只获取字典的键
+for key := range testMap {
+    fmt.Println(key)
+}
+
+// 键值对调
+invMap := make(map[int] string, 3)
+for k, v := range testMap {
+    invMap[v] = k
+}
+
+// 排序，分别为字典的键和值创建切片，然后对切片进行排序来实现
+keys := make([]string, 0)
+for k, _ := range testMap {
+    keys = append(keys, k)
+}
+sort.Strings(keys)  // 对键进行排序
+fmt.Println("Sorted map by key:")
+for _, k := range keys {
+    fmt.Println(k, testMap[k])
+}
+
+values := make([]int, 0)
+for _, v := range testMap {
+    values = append(values, v)
+}
+sort.Ints(values)   // 对值进行排序
+fmt.Println("Sorted map by value:")
+for _, v := range values  {
+    fmt.Println(invMap[v], v)
+}
+```
+
+## 指针&unsafe.Pointer
+
+```go
+a := 100
+var ptr *int  // 声明指针类型
+ptr = &a      // 初始化指针类型值为变量 a 
+fmt.Println(ptr)    // 0xc0000a2000
+fmt.Println(*ptr)   // 100
+
+fmt.Printf("%p\n", ptr)   // 通过 %p 来标识指针类型
+fmt.Printf("%d\n", *ptr)
+```
+
+### unsafe.Pointer
+
+`unsafe.Pointer` 是特别定义的一种指针类型，它可以包含任意类型变量的地址（类似 C 语言中的 `void` 类型指针）。Go 官方文档对这个类型有如下四个描述：
+
+- 任何类型的指针都可以被转化为 `unsafe.Pointer`；
+- `unsafe.Pointer` 可以被转化为任何类型的指针；
+- `uintptr` 可以被转化为 `unsafe.Pointer`；
+- `unsafe.Pointer` 可以被转化为 `uintptr`;
+
+#### 指针类型转换
+
+```go
+i := 10
+var p *int = &i
+
+var fp *float32 = (*float32)(unsafe.Pointer(p))
+*fp = *fp * 10
+fmt.Println(i)  // 100
+```
+
+#### 指针运算实现
+
+uintptr 是 Go 内置的可用于存储指针的整型，而整型是可以进行数学运算的！因此，将 unsafe.Pointer 转化为 uintptr 类型后，就可以让本不具备运算能力的指针具备了指针运算能力：
+
+```go
+arr := [3]int{1, 2, 3}
+ap := &arr
+sp := (*int)(unsafe.Pointer(uintptr(unsafe.Pointer(ap)) + unsafe.Sizeof(arr[0])))
+*sp += 3
+fmt.Println(arr)  // [1 5 3]
 ```
