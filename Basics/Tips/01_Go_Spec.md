@@ -1,4 +1,4 @@
-# [Go Spec](https://go.dev/ref/spec#Package_initialization)
+# [Go Spec](https://go.dev/ref/spec#Package_initialization) & General Knowing
 
 ## Package Initialization
 
@@ -162,3 +162,9 @@ func main() {
 	wg.Wait()
 }
 ```
+
+## interface
+
+> [理解 Go interface 的 5 个关键点](https://sanyuesha.com/2017/07/22/how-to-understand-go-interface/)
+
+## [sync.Pool](https://pkg.go.dev/sync#Pool)
