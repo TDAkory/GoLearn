@@ -103,7 +103,7 @@ func C() {
 import "testing"
 
 func TestC(t *testing.T) {
-	C()
+    C()
 }
 
 // === RUN   TestC
@@ -131,7 +131,7 @@ A WaitGroup must not be copied after first use.
 package main
 
 import (
-	"sync"
+    "sync"
 )
 
 type httpPkg struct{}
@@ -141,25 +141,25 @@ func (httpPkg) Get(url string) {}
 var http httpPkg
 
 func main() {
-	var wg sync.WaitGroup
-	var urls = []string{
-		"http://www.golang.org/",
-		"http://www.google.com/",
-		"http://www.somestupidname.com/",
-	}
-	for _, url := range urls {
-		// Increment the WaitGroup counter.
-		wg.Add(1)
-		// Launch a goroutine to fetch the URL.
-		go func(url string) {
-			// Decrement the counter when the goroutine completes.
-			defer wg.Done()
-			// Fetch the URL.
-			http.Get(url)
-		}(url)
-	}
-	// Wait for all HTTP fetches to complete.
-	wg.Wait()
+    var wg sync.WaitGroup
+    var urls = []string{
+    	"http://www.golang.org/",
+    	"http://www.google.com/",
+    	"http://www.somestupidname.com/",
+    }
+    for _, url := range urls {
+    	// Increment the WaitGroup counter.
+    	wg.Add(1)
+    	// Launch a goroutine to fetch the URL.
+    	go func(url string) {
+    		// Decrement the counter when the goroutine completes.
+    		defer wg.Done()
+    		// Fetch the URL.
+    		http.Get(url)
+    	}(url)
+    }
+    // Wait for all HTTP fetches to complete.
+    wg.Wait()
 }
 ```
 
@@ -168,3 +168,28 @@ func main() {
 > [理解 Go interface 的 5 个关键点](https://sanyuesha.com/2017/07/22/how-to-understand-go-interface/)
 
 ## [sync.Pool](https://pkg.go.dev/sync#Pool)
+
+## [unsafe](https://pkg.go.dev/unsafe)
+
+Package unsafe contains operations that step around the type safety of Go programs.
+
+Packages that import unsafe may be non-portable and are not protected by the Go 1 compatibility guidelines.
+
+### [unsafe.Pointer](https://pkg.go.dev/unsafe#Pointer)
+
+- A pointer value of any type can be converted to a Pointer.
+- A Pointer can be converted to a pointer value of any type.
+- A uintptr can be converted to a Pointer.
+- A Pointer can be converted to a uintptr.
+
+## [reflect](https://draveness.me/golang/docs/part2-foundation/ch04-basic/golang-reflect/)
+
+## [defer](https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-defer/)
+
+## [runtime]
+
+## [time]
+
+## [gopkg/sync]
+
+## [go test]
