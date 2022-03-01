@@ -1,4 +1,5 @@
 ## slice vs array
+
 * array 需指明长度，长度为常量且不可改变
 * array 的长度为其类型中的组成部分
 * array 在作为参数的时候会产生copy
