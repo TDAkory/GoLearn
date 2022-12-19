@@ -61,6 +61,7 @@ func modifySlice(s []int) {
     s = append(s, 4096)  // [1024, 1, 2] 赋值发生在扩容之前，且外部len没有变
 }
 ```
+
 * 如果没有发生扩容，修改在原来的内存中
 * 如果发生了扩容，修改会在新的内存中 
 
@@ -78,7 +79,8 @@ func main() {
 }
 
 ```
-* 使用`[]Type{}`或者`make([]Type)`初始化后，slice部位`nil`
+
+* 使用`[]Type{}`或者`make([]Type)`初始化后，slice不为`nil`
 * 使用 `var x [] Type`后，slice为`nil`
 
 ### [Bounds Checking Elimination](https://go101.org/article/bounds-check-elimination.html)
