@@ -72,7 +72,7 @@ var v8 func(a int) int  // 函数，参数类型为整型，返回值类型为�
 
 变量在声明之后，系统会自动将变量值初始化为对应类型的零值，比如上述 v1 的值为 0，v2 的值空字符串，v3 的值为 false，依次类推，我们打印上述变量的值，可以看到如下输出：
 
-![output](https://raw.githubusercontent.com/TDAkory/ImageResources/main/img/20211126104313.png)
+![output](https://raw.githubusercontent.com/TDAkory/ImageResources/master/img/20211126104313.png)
 
 ### 1.1.2. 初始化
 
