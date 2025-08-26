@@ -1,5 +1,22 @@
 # [Go Spec](https://go.dev/ref/spec#Package_initialization) & General Knowing
 
+- [Go Spec \& General Knowing](#go-spec--general-knowing)
+	- [Package Initialization](#package-initialization)
+	- [Panic \& Recovery](#panic--recovery)
+	- [Context](#context)
+	- [WaitGroup](#waitgroup)
+	- [interface](#interface)
+	- [sync.Pool](#syncpool)
+	- [unsafe](#unsafe)
+		- [unsafe.Pointer](#unsafepointer)
+	- [reflect](#reflect)
+	- [defer](#defer)
+	- [\[runtime\]](#runtime)
+	- [\[time\]](#time)
+	- [\[gopkg/sync\]](#gopkgsync)
+	- [\[go test\]](#go-test)
+
+
 ## Package Initialization
 
 总体而言:  包级变量初始化 ->  init() -> main()

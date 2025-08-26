@@ -6,6 +6,7 @@
 * golang 所有的函数参数都是值传递 （Not Really Sure ？）
 
 ### growslice
+
 ```golang
 // slice的len和cap分别是多少
 var s []int     // 0,0
@@ -19,6 +20,7 @@ for i := 3; i < 1025; i++ {     // 1025, 1280
     s = append(s, i) 
 }
 ```
+
 `growslice`处理slice扩容
 * 当 `cap < 1024` 时，每次 `*2`
 * 当 `cap >= 1024` 时，每次 `*1.25`
@@ -26,6 +28,7 @@ for i := 3; i < 1025; i++ {     // 1025, 1280
 * 直接使用idx赋值而非append赋值可以提升性能，机器码少
 
 ### 一些问题例子
+
 ```golang
 func main() {
     var s []int
@@ -87,6 +90,7 @@ func main() {
 
 
 ## Map
+
 * mao实际上的值是个指针，传的参数是指针
 * 修改map是可见的
 * map的key value都不可以取地址，随着map扩容地址会改变
@@ -94,22 +98,26 @@ func main() {
 * map删除key不会自动缩容
 
 ## Channel
+
 * channel是有锁的
 * channel 底层是个ringbuffer
 * channel调用会触发调度
 * 高并发、高性能编程不适合使用channel
 
 ### un/buffered channel
+
 * buffered channel 会发生两次`copy`
-    * send goroutine -> buf
-    * buf -> receive goroutine
+  * send goroutine -> buf
+  * buf -> receive goroutine
 * unbuffered channel 会发生一次`copy`
-    * send goroutine -> receive goroutine
+  * send goroutine -> receive goroutine
 * unbuffered channel receive 完成后 `send` 才会返回
 
 ### select closed channel
+
 * `for` + `select closed channel` 会造成死循环
 * `select` 中 `break` 无法跳出 `for` 循环
+
 ```golang
 // 一直打印0
 func main() {
